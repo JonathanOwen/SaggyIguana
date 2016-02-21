@@ -1,0 +1,56 @@
+Distribution of sample means from an exponential population distribution
+========================================================================
+Jonathan Owen  
+May 19, 2015
+
+
+
+
+```{r}
+
+# General R
+# setwd("C:/Users/jonat_000/StatInf_Project")
+#.libPaths("C:/MyLocalData/jonathan.owen/R/win-library/3.2")
+
+# Additional libraries
+library(ggplot2)
+library(ggthemes)
+
+
+# Assign number of simulations and number of samples to be averaged
+nsim <- 1000
+nsample <- 40
+
+# Set lambda
+lambda <- 0.2
+
+# Simulation
+set.seed(51815)
+exp_dist <- matrix(rexp(nsim * nsample, rate = lambda), nrow = nsim)
+exp_nsample <- apply(exp_dist, 1, mean)
+exp_df <- data.frame(distribution = c(rep("exponential", 40000),
+                                      rep("sample means", 1000)),
+                                x = c(c(exp_dist), c(exp_nsample)))
+
+ggplot(data=exp_df, aes(x, fill = factor(distribution))) + 
+  theme(legend.position = "none") +
+  scale_fill_tableau("tableau10medium") +
+  geom_histogram(aes(y = ..density..), binwidth = 0.3) +
+  xlim(0, 15) + ylim(0, 0.6) +
+  facet_grid(distribution ~ .,) + 
+  stat_function(data = subset(exp_df, distribution == "sample means"),
+                fun = dnorm, color = "brown3", 
+                args=list(mean=1/lambda, sd=1/(lambda*sqrt(nsample)))) +
+  stat_function(data = subset(exp_df, distribution == "exponential"),
+                fun = dexp, color="darkblue", 
+                args = list(rate = lambda))
+
+```
+
+# Calculate & annotate plot with theoretical mean and sd
+exp_mean <- 1/lambda
+exp_sd <- 1/(lambda * sqrt(nsample))
+
+abline(v = mean(exp_nsample), col = "blue")
+abline(v = exp_mean, col = "red")
+abline(v = mean(exp_nsample), col = "blue")

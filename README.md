@@ -1,2 +1,4 @@
 # SaggyIguana
-Files for Statistical Inference course assignment part 1.
+Files for part 1 of the **Statistical Inference** course assignment 
+(#6 in Coursera Data Science Specialization). 
+Instructor--Professor Brian Caffo, Johns Hopkins Bloomberg School of Public Health.
